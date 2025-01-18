@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: {{ .Values.frontend.image }}
+          ports:
+            - containerPort: {{ .Values.frontend.containerPort }}
+          env:
+            - name: VITE_API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: VITE_API_URL
+          resources:
+            requests:
+              cpu: {{ .Values.frontend.resources.requests.cpu }}
+            limits:
+              cpu: {{ .Values.frontend.resources.limits.cpu }}

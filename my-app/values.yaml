@@ -1,0 +1,33 @@
+replicaCount: 1
+
+frontend:
+  image: santoshpalla27/3-tier:frontend-6
+  containerPort: 5173
+  resources:
+    requests:
+      cpu: "200m"
+    limits:
+      cpu: "500m"
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilization: 50
+
+backend:
+  image: santoshpalla27/3-tier:backend-6
+  containerPort: 5050
+
+database:
+  image: mongo:latest
+  containerPort: 27017
+  storage:
+    size: 1Gi
+
+config:
+  VITE_API_URL: "http://santosh.website/record/"
+  MONGO_URI: "mongodb://mongodb:27017"
+
+ingress:
+  enabled: true
+  host: santosh.website
